@@ -4,7 +4,7 @@ import Register from "./pages/Register";
 function Auth(){
     return(
         <>
-        <LogIn/>
+        <Register/>
         </>
     )
 
