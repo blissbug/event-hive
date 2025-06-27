@@ -1,14 +1,11 @@
 import { useState } from "react";
-import Navbar from "../home/-components/Navbar";
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import Card from "../home/-components/Card";
-import Footer from "../home/-components/Footer";
 
 export default function EventProfile(){
     const [fav,setFav] = useState(false);
     return(
         <>
-        <Navbar/>
         <div className="w-full relative h-[80vh] overflow-hidden ">
             <img src="https://images.unsplash.com/photo-1571310100246-e0676f359b42?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" 
             className="absolute inset-0 w-full h-full object-cover" />
@@ -98,7 +95,6 @@ export default function EventProfile(){
             </div>
         </div>
         </div>
-            <Footer/>
         </div>
 
         </>

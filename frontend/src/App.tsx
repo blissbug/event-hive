@@ -1,13 +1,15 @@
+import { Outlet } from 'react-router-dom'
 import './App.css'
-import Auth from './features/auth'
-import EventProfile from './features/EventProfile'
-import Home from './features/home'
+import Navbar from './features/home/-components/Navbar'
+import Footer from './features/home/-components/Footer'
 
 function App() {
 
   return (
     <>
-      <EventProfile/>
+      <Navbar/>
+      <Outlet/>
+      <Footer/>
     </>
   )
 }
