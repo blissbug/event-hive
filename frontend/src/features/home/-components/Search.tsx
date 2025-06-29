@@ -4,7 +4,7 @@ export default function Search(){
     return(
         <div className="w-4/6 mx-auto">
             <div className="my-5 shadow-2xl/40 h-24 w-full grid rounded-lg grid-cols-7 gap-0">
-            <div className="col-span-4 flex justify-between items-center mx-auto px-2 rounded-lg border-gray-200 border-2 my-auto">
+            <div className="col-span-4 flex justify-between items-center mx-5 px-2 rounded-lg border-gray-200 border-2 my-auto">
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" 
                     className="size-6">
@@ -13,7 +13,7 @@ export default function Search(){
                 </div>
                 <div>
                     <input type="text" name="" id="" 
-                    className="w-md h-12 text-lg"/>
+                    className="w-full h-12 text-lg"/>
                 </div>
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" 

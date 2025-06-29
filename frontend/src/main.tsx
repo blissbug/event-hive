@@ -8,6 +8,7 @@ import EventProfile from './features/EventProfile/index.tsx'
 import { createBrowserRouter } from 'react-router-dom'
 import Register from './features/auth/pages/Register.tsx'
 import LogIn from './features/auth/pages/LogIn.tsx'
+import EventDashboard from './features/EventDashboard/index.tsx'
 
 const appRoutes = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const appRoutes = createBrowserRouter([
     {
       path:"/events/:id",
       element:<EventProfile/>
+    },
+    {
+      path:"/create",
+      element:<EventDashboard/>
     }
   ]
 },

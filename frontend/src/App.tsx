@@ -7,9 +7,12 @@ function App() {
 
   return (
     <>
-      <Navbar/>
-      <Outlet/>
-      <Footer/>
+    <div className='flex-row min-h-screen '>
+        <Navbar/>
+        <Outlet/>
+        <Footer/>
+    </div>
+      
     </>
   )
 }
