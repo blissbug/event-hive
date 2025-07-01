@@ -6,7 +6,7 @@ export default function EventRow({header}:{
     let [select,setSelect] = useState(false);
     return(
         <div className={`w-full border-b-2 border-gray-200 h-16 grid-cols-7 grid items-center text-center text-xs ${header && "bg-blue-300/15 text-gray-400"}`}>
-            <p className="flex items-center">
+            <div className="flex items-center">
                 <div className={`size-6 border-2 rounded-lg mx-auto flex items-center justify-center ${select?"border-pink-500 bg-pink-500 ":"border-gray-500"} hover:border-pink-500`} onClick={()=>{setSelect(!select)}}>
                     {select &&
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-6 text-white">
@@ -14,7 +14,8 @@ export default function EventRow({header}:{
                         </svg>
                     }
                 </div>
-                Event Name</p>
+                <p>Event Name</p>
+            </div>
             <p className="col-span-2">Date of Event</p>
             <p>Tickets Sold/Total Tickets</p>
             <p>Price</p>

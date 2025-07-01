@@ -1,13 +1,21 @@
 
+import { useState } from "react";
 import Card from "./-components/Card"
 import EventRow from "./-components/EventRow"
+import CreateEventModal from "./-components/CreateEventModal";
+
 export default function EventDashboard(){
+
+    const [modal,setModal] = useState(true);
+
     return(
         <div className="bg-gray-100">
+            {modal && <CreateEventModal setModal={setModal}/>}
             <div className="min-h-fit  mx-16 p-5">
                 <div className="flex justify-between px-4 pt-4 items-center">
                     <p className="text-3xl font-semibold">Hey User</p>
-                    <button className="bg-blue-500 text-white p-2 rounded-lg cursor-pointer">Create an Event</button>
+                    <button className="bg-blue-500 text-white p-2 rounded-lg cursor-pointer"
+                    onClick={()=>{setModal(true)}}>Create an Event</button>
 
                 </div>
                 <div className="grid grid-cols-4 h-fit my-2.5 ">
@@ -35,8 +43,6 @@ export default function EventDashboard(){
                     </div>
                 </div>
             </div>
-        </div>
-            
-        
+        </div> 
     )
 }
