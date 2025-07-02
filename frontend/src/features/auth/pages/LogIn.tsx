@@ -6,7 +6,7 @@ function LogIn(){
     return(
         <>
         <div className="grid grid-cols-6 gap-5 h-screen w-screen box-border ">
-            <div className="col-span-2 bg-linear-to-t from-primary-800 to-primary-900/75 rounded-2xl p-10 text-white font-montserrat m-4">
+            <div className="col-span-2 bg-linear-to-t from-primary-800 to-primary-900/60 p-10 text-white font-montserrat">
                 <h1 className="font-semibold tracking-wider">EVENTHIVE</h1>
                 <div className="my-24">
                     <h1 className="text-4xl font-semibold my-5 leading-12">Start your <br/>journey with us.</h1>

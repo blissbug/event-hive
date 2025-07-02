@@ -8,28 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-require("dotenv/config");
-const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    let headers = req.headers;
-    let token = headers["authorization"];
-    if (token) {
-        //@ts-ignore
-        let decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_TOKEN);
-        req.user = {
-            id: decoded._id,
-            isAdmin: decoded.isAdmin
-        };
-        next();
+const isAdminMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.user || req.user.isAdmin) {
+        return res.status(403).json({ message: 'Access denied. Administrator privileges required.' });
     }
-    else {
-        res.json({
-            message: "No token found!"
-        });
-    }
+    next();
 });
-exports.default = authMiddleware;
+exports.default = isAdminMiddleware;

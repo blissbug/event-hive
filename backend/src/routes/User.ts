@@ -4,9 +4,9 @@ import authMiddleware from "../middlewares/authMiddleware";
 
 const UserRouter = Router();
 
-UserRouter.get("/signin",signInController);
+UserRouter.post("/signin",signInController);
 
-UserRouter.get("/signup",signUpController);
+UserRouter.post("/signup",signUpController);
 
 UserRouter.get("/events",authMiddleware,(req,res)=>{
     //@ts-ignore

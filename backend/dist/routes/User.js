@@ -7,8 +7,8 @@ const express_1 = require("express");
 const userControllers_1 = require("../controllers/userControllers");
 const authMiddleware_1 = __importDefault(require("../middlewares/authMiddleware"));
 const UserRouter = (0, express_1.Router)();
-UserRouter.get("/signin", userControllers_1.signInController);
-UserRouter.get("/signup", userControllers_1.signUpController);
+UserRouter.post("/signin", userControllers_1.signInController);
+UserRouter.post("/signup", userControllers_1.signUpController);
 UserRouter.get("/events", authMiddleware_1.default, (req, res) => {
     //@ts-ignore
     console.log(req.userId);

@@ -9,8 +9,10 @@ const authMiddleware = async (req:Request,res:Response,next:NextFunction) => {
     if(token){
         //@ts-ignore
         let decoded = jwt.verify(token,process.env.JWT_TOKEN);
-        //@ts-ignore
-        req.userId = decoded._id;
+        req.user = {
+            id:decoded._id,
+            isAdmin:decoded.isAdmin
+        }
         next();
     }
     else{

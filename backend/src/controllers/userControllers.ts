@@ -22,7 +22,7 @@ export async function signInController(req:Request,res:Response){
 
             if(!user){
                 res.json({
-                    message:"sign up first!",
+                    message:"Sign Up First!",
                 })
                 return;
             }
@@ -31,47 +31,51 @@ export async function signInController(req:Request,res:Response){
 
             if(!valid){
                 res.json({
-                    message:"invalid password or email"
+                    message:"Invalid Password or Email"
                 })
                 return;
             }
 
             //@ts-ignore
-            const token = jwt.sign({_id:user._id},process.env.JWT_TOKEN);
+            const token = jwt.sign({_id:user._id,isAdmin:user.admin},process.env.JWT_TOKEN);
 
             res.json({
                 message:"sign In",
+                isAdmin:user.admin,
                 token
             })
             return;
         }
-    //add error type
-    catch(err){
-        res.json({
-            //@ts-ignore
-            message:err.message,
-        })
-    } 
-    
+    catch(err:unknown){
+        if(err instanceof Error){
+            res.json({
+                message:err.message
+            })
+        }
+        else{
+            console.error("Ann error occured!")
+        }   
+    }  
 }
 
-
+//signup validation with zod
 const SignUpValidation = z.object({
   name: z.string(),
   email:z.email(),
-  password:z.string().min(8)
+  password:z.string().min(8),
+  isAdmin:z.boolean(),
 });
 
 export async function signUpController(req:Request,res:Response){
     let parsedData = SignUpValidation.parse(req.body);
-    let {name,email,password} = parsedData;
+    let {name,email,password,isAdmin} = parsedData;
 
     try {
             let user = await User.findOne({email});
 
             if(user){
                 res.json({
-                    message:"account already present, log in!"
+                    message:"Account already present, log in!"
                 })
                 return;
             }
@@ -81,22 +85,20 @@ export async function signUpController(req:Request,res:Response){
             user = await User.create({
                 name,
                 email,
-                password:hashedPassword
+                password:hashedPassword,
+                admin:isAdmin,
             })
-
-            //@ts-ignore
-            const token = jwt.sign({_id:user._id},process.env.JWT_TOKEN);
 
             res.json({
-                message:"sign Up",
-                token
+                message:"User created! Please proceed to Log In",
             })
         }
-    //add error type
-    catch(err){
-        res.json({
-            //@ts-ignore
-            message:err.message,
-        })
+    catch(err:unknown){
+            if (err instanceof Error) {
+                console.error("Caught an Error object:", err.message);
+            }
+            else{
+                console.log("something occured!")
+            }
+        } 
     }
-}

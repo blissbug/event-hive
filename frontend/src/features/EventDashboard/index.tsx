@@ -6,7 +6,7 @@ import CreateEventModal from "./-components/CreateEventModal";
 
 export default function EventDashboard(){
 
-    const [modal,setModal] = useState(true);
+    const [modal,setModal] = useState(false);
 
     return(
         <div className="bg-gray-100">
