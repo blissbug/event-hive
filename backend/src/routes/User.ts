@@ -9,8 +9,7 @@ UserRouter.post("/signin",signInController);
 UserRouter.post("/signup",signUpController);
 
 UserRouter.get("/events",authMiddleware,(req,res)=>{
-    //@ts-ignore
-    console.log(req.userId);
+    console.log(req.user?.id);
     res.json({
         user:"exists!"
     })

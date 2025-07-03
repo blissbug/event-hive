@@ -10,8 +10,8 @@ const UserRouter = (0, express_1.Router)();
 UserRouter.post("/signin", userControllers_1.signInController);
 UserRouter.post("/signup", userControllers_1.signUpController);
 UserRouter.get("/events", authMiddleware_1.default, (req, res) => {
-    //@ts-ignore
-    console.log(req.userId);
+    var _a;
+    console.log((_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
     res.json({
         user: "exists!"
     });
