@@ -4,7 +4,8 @@ import 'dotenv/config'
 import connectDB from "./config/db";
 import UserRouter from "./routes/User";
 import session from "express-session";
-import MongoStore from "connect-mongo"
+import MongoStore from "connect-mongo";
+import encryptKey from "./utils/encrypt";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get("/",(req,res)=>{
     })
 })
 
+encryptKey("tyyy");
 
 app.use(session({
   secret: 'keyboardcat',
