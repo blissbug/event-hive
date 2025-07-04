@@ -4,41 +4,58 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generate32ByteKey = generate32ByteKey;
+exports.encrypt = encrypt;
+exports.decrypt = decrypt;
 const crypto_1 = __importDefault(require("crypto"));
 require("dotenv/config");
-if (!process.env.SECRET_KEY || !process.env.ENCRYPTION_METHOD) {
-    throw new Error("Keys not set properly, kindly kys!");
-}
-//32 byte key - 256 bit key
-//create a 12 bit nonce - used once only - called iv
-//optional - aad or ad to keep authentication not encryption
-//we get a ciphertext and authtag in return
-// store all three bitches - nonce, encrypted, auth tag
-//transmit aad separately
-//possibly concatenate
 function generate32ByteKey() {
     const cipherKey = crypto_1.default.pbkdf2('secret', 'salt', 100000, 32, 'sha512', (err, derivedKey) => {
         if (err)
             throw err;
         return derivedKey.toString('base64');
     });
+    return cipherKey;
 }
 const ALGO = "aes-256-gcm";
-function encryptKey(data) {
+function encrypt(data) {
+    if (!process.env.SECRET_KEY || !process.env.ENCRYPTION_METHOD || process.env.SECRET_KEY === undefined) {
+        throw new Error("Keys not defined properly or not accessible! Please chceck and ensure proper keys are set.");
+    }
+    //generate unique nonce
     const nonce = crypto_1.default.randomBytes(12);
-    //@ts-ignore
     const cipher = crypto_1.default.createCipheriv(ALGO, process.env.SECRET_KEY, nonce);
-    //@ts-ignore
     let preEncrypted = cipher.update(data);
-    //@ts-ignore
     let postEncrypted = cipher.final();
-    //encrypted += cipher.final('base64');
-    const fullCiphertextBuffer = Buffer.concat([preEncrypted, postEncrypted]);
     let authTag = cipher.getAuthTag();
+    const fullCiphertextBuffer = Buffer.concat([preEncrypted, postEncrypted]);
     let nonceString = nonce.toString('base64');
     let authTagString = authTag.toString('base64');
     const fullCiphertext = fullCiphertextBuffer.toString("base64");
-    console.log(fullCiphertext + " " + nonceString + " " + authTagString);
-    return fullCiphertext;
+    //TODO: try setting as a json object instead
+    const finalEncryptedData = fullCiphertext + ":" + nonceString + ":" + authTagString;
+    return finalEncryptedData;
 }
-exports.default = encryptKey;
+function decrypt(text) {
+    if (!process.env.SECRET_KEY || !process.env.ENCRYPTION_METHOD || process.env.SECRET_KEY === undefined) {
+        throw new Error("Keys not defined properly or not accessible! Please chceck and ensure proper keys are set.");
+    }
+    try {
+        const data = text.split(":");
+        let fullCiphertext = data[0];
+        let nonceString = data[1];
+        let authTagString = data[2];
+        let cipherBuffer = Buffer.from(fullCiphertext, 'base64');
+        let nonceBuffer = Buffer.from(nonceString, 'base64');
+        let authTagBuffer = Buffer.from(authTagString, 'base64');
+        const decipher = crypto_1.default.createDecipheriv(ALGO, process.env.SECRET_KEY, nonceBuffer);
+        decipher.setAuthTag(authTagBuffer);
+        const preData = decipher.update(cipherBuffer);
+        const postData = decipher.final();
+        const bufferResult = Buffer.concat([preData, postData]);
+        const decrypted = bufferResult.toString('utf8');
+        return decrypted;
+    }
+    catch (err) {
+        console.error("Error Occured", err);
+    }
+}

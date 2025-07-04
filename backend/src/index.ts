@@ -5,7 +5,7 @@ import connectDB from "./config/db";
 import UserRouter from "./routes/User";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import encryptKey from "./utils/encrypt";
+import {decrypt} from "./utils/encrypt";
 
 const app = express();
 
@@ -19,7 +19,8 @@ app.get("/",(req,res)=>{
     })
 })
 
-encryptKey("tyyy");
+const res = decrypt("1ERwpQ==:JpEf7zX3bZu4vzXr:2OMrgjb2J18zpxsvXXwBxQ==");
+console.log(res);
 
 app.use(session({
   secret: 'keyboardcat',
