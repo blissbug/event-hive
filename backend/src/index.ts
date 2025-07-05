@@ -22,6 +22,7 @@ app.get("/",(req,res)=>{
 const res = decrypt("1ERwpQ==:JpEf7zX3bZu4vzXr:2OMrgjb2J18zpxsvXXwBxQ==");
 console.log(res);
 
+//TODO: Use redis for caching && transfer this function to utils
 app.use(session({
   secret: 'keyboardcat',
   resave: false,

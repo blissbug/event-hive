@@ -9,6 +9,8 @@ import { createBrowserRouter } from 'react-router-dom'
 import Register from './features/auth/pages/Register.tsx'
 import LogIn from './features/auth/pages/LogIn.tsx'
 import EventDashboard from './features/EventDashboard/index.tsx'
+import store from './app/store.ts'
+import {Provider } from "react-redux"
 
 const appRoutes = createBrowserRouter([
   {
@@ -42,5 +44,7 @@ const appRoutes = createBrowserRouter([
 ])
 
 createRoot(document.getElementById('root')!).render(
+  <Provider store={store}>
       <RouterProvider router={appRoutes}/>
+  </Provider>
 )
