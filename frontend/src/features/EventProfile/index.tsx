@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import Card from "../home/-components/Card";
+import BuyTicketModal from "./-components/BuyTicketModal";
 
 export default function EventProfile(){
     const [fav,setFav] = useState(false);
+    const [modal,setModal] = useState(true);
     return(
         <>
         <div className="w-full relative h-[80vh] overflow-hidden ">
+            {modal && <BuyTicketModal setModal={setModal}/>}
             <img src="https://images.unsplash.com/photo-1571310100246-e0676f359b42?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" 
             className="absolute inset-0 w-full h-full object-cover" />
             <div className="absolute">
@@ -80,7 +83,9 @@ export default function EventProfile(){
                         </button>
                     </div>
                      <div className=" rounded-lg h-fit px-4 py-2 my-1">
-                        <button className="text-white font-semibold bg-green-500 py-4 rounded-lg w-full cursor-pointer">BUY TICKET</button>
+                        <button className="text-white font-semibold bg-green-500 py-4 rounded-lg w-full cursor-pointer"
+                        onClick={()=>setModal((c)=>!c)}
+                        >BUY TICKET</button>
                     </div>
                 </div>
             </div>
