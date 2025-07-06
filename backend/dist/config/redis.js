@@ -7,13 +7,16 @@ exports.redisStore = void 0;
 const redis_1 = require("redis");
 const connect_redis_1 = require("connect-redis");
 const express_session_1 = __importDefault(require("express-session"));
+require("dotenv/config");
+const REDIS_DB_URI = process.env.REDIS_DB_URI || 'localhost';
+const REDIS_PORT = parseInt(process.env.REDIS_PORT || '6379', 10);
 function connectRedis() {
     let redisClient = (0, redis_1.createClient)({
         username: 'default',
-        password: 'suGH8phqLW2OMqWaqlbrCif3ADNaJFVp',
+        password: process.env.REDIS_PASS,
         socket: {
-            host: 'redis-18286.c52.us-east-1-4.ec2.redns.redis-cloud.com',
-            port: 18286
+            host: REDIS_DB_URI,
+            port: REDIS_PORT
         }
     });
     redisClient.connect().catch(console.error);

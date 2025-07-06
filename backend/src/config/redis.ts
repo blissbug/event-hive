@@ -1,14 +1,18 @@
 import { createClient } from "redis";
 import { RedisStore } from "connect-redis";
 import session from "express-session";
+import "dotenv/config"
+
+const REDIS_DB_URI = process.env.REDIS_DB_URI || 'localhost'; 
+const REDIS_PORT = parseInt(process.env.REDIS_PORT || '6379', 10);
 
 function connectRedis(){
     let redisClient = createClient({
       username: 'default',
-      password: 'suGH8phqLW2OMqWaqlbrCif3ADNaJFVp',
+      password: process.env.REDIS_PASS,
       socket: {
-          host: 'redis-18286.c52.us-east-1-4.ec2.redns.redis-cloud.com',
-          port: 18286
+          host: REDIS_DB_URI,
+          port: REDIS_PORT
       }
     });
 
