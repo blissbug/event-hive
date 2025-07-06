@@ -8,6 +8,7 @@ exports.encrypt = encrypt;
 exports.decrypt = decrypt;
 const crypto_1 = __importDefault(require("crypto"));
 require("dotenv/config");
+const ALGO = process.env.ENCRYPTION_METHOD;
 function generate32ByteKey() {
     const cipherKey = crypto_1.default.pbkdf2('secret', 'salt', 100000, 32, 'sha512', (err, derivedKey) => {
         if (err)
@@ -16,7 +17,6 @@ function generate32ByteKey() {
     });
     return cipherKey;
 }
-const ALGO = "aes-256-gcm";
 function encrypt(data) {
     if (!process.env.SECRET_KEY || !process.env.ENCRYPTION_METHOD || process.env.SECRET_KEY === undefined) {
         throw new Error("Keys not defined properly or not accessible! Please chceck and ensure proper keys are set.");
@@ -36,10 +36,10 @@ function encrypt(data) {
     return finalEncryptedData;
 }
 function decrypt(text) {
-    if (!process.env.SECRET_KEY || !process.env.ENCRYPTION_METHOD || process.env.SECRET_KEY === undefined) {
-        throw new Error("Keys not defined properly or not accessible! Please chceck and ensure proper keys are set.");
-    }
     try {
+        if (!process.env.SECRET_KEY || !process.env.ENCRYPTION_METHOD || process.env.SECRET_KEY === undefined) {
+            throw new Error("Keys not defined properly or not accessible! Please chceck and ensure proper keys are set.");
+        }
         const data = text.split(":");
         let fullCiphertext = data[0];
         let nonceString = data[1];
@@ -56,6 +56,6 @@ function decrypt(text) {
         return decrypted;
     }
     catch (err) {
-        console.error("Error Occured", err);
+        console.error("Error Occured! decryption not okay", err);
     }
 }
