@@ -1,14 +1,13 @@
 import { createClient } from "redis";
 import { RedisStore } from "connect-redis";
 import session from "express-session";
-import "dotenv/config"
 
 function connectRedis(){
     let redisClient = createClient({
       username: 'default',
-      password: process.env.REDIS_PASS,
+      password: 'suGH8phqLW2OMqWaqlbrCif3ADNaJFVp',
       socket: {
-          host: process.env.REDIS_DB_URI,
+          host: 'redis-18286.c52.us-east-1-4.ec2.redns.redis-cloud.com',
           port: 18286
       }
     });
@@ -24,10 +23,10 @@ export const redisStore = new RedisStore({
   prefix: "myapp:",
 })
 
-const redisSession = session({
+const sessionObj = session({
     store: redisStore,
     resave: false, 
     saveUninitialized: false, 
     secret: "keyboardcat",
   })
- export default redisSession;
+ export default sessionObj;

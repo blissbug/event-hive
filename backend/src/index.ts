@@ -3,7 +3,7 @@ import cors from "cors";
 import 'dotenv/config'
 import connectDB from "./config/db";
 import UserRouter from "./routes/User";
-import redisSession from "./config/redis";
+import sessionObj from "./config/redis";
 
 const app = express();
 
@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use(
-  redisSession
+  sessionObj
 )
 
 app.get("/",(req,res)=>{
@@ -23,6 +23,7 @@ app.get("/",(req,res)=>{
     } else {
         res.send('Session not available');
     }
+
 })
 
 //routes
