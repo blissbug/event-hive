@@ -4,6 +4,7 @@ import 'dotenv/config'
 import connectDB from "./config/db";
 import UserRouter from "./routes/User";
 import sessionObj from "./config/redis";
+import publicRouter from "./routes/Public";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.get("/",(req,res)=>{
 })
 
 //routes
+app.use(publicRouter);
 app.use('/api/user',UserRouter);
 
 app.listen(8080,()=>{
