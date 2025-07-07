@@ -1,13 +1,37 @@
 import { Link } from "react-router-dom";
 import InputElement from "../../../components/InputElement";
 import Button from "../../../components/Button";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import axios from "axios"
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function Register(){
-    const[admin,setAdmin] = useState(false);
+    const [isAdmin,setIsAdmin] = useState(false);
+
+    const nameRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+
     function handleChange(event:React.ChangeEvent<HTMLInputElement>){
-        setAdmin(event.target.value=="Admin");
+        setIsAdmin(event.target.value=="Admin");
     }
+
+    async function handleSubmit(){
+        const name = nameRef.current ? nameRef.current.value : '';
+        const email = emailRef.current ? emailRef.current.value : '';    
+        const password = passwordRef.current ? passwordRef.current.value : '';
+
+        await axios.post(`${BACKEND_URL}/api/user/signup`,{
+            name,
+            email,
+            password,
+            isAdmin,
+        })
+
+        console.log("submitted")
+    }
+
     return(
         <>
         <div className="grid grid-cols-6 gap-5 h-screen w-screen box-border ">
@@ -25,11 +49,11 @@ function Register(){
                 <h1 className="text-3xl font-bold font-montserrat my-2 py-3">Sign Up</h1>
                 <p className="mb-10">Have an account? <Link to="/logIn" className="text-blue-600">Log In</Link></p>
                 <p className="mt-2 text-gray-500 font-semibold">Username </p>
-                <InputElement placeholder="Enter username" />
+                <InputElement placeholder="Enter username" gotRef={nameRef}/>
                 <p className="mt-2 text-gray-500 font-semibold" >Email </p>
-                <InputElement placeholder="Enter Email" />
+                <InputElement placeholder="Enter Email" gotRef={emailRef}/>
                 <p className="mt-2 text-gray-500 font-semibold">Password </p>
-                <InputElement placeholder="Enter Password"/>
+                <InputElement placeholder="Enter Password" gotRef={passwordRef}/>
                 <p className="mt-2 text-gray-500 font-semibold">Select Role:</p>
                 <div className="flex">
                 <label
@@ -43,7 +67,7 @@ function Register(){
                     value="User"
                     style={{ accentColor: '#3B82F6' }}
                     className=" h-5 w-10 text-blue-500 focus:ring-blue-500 rounded-full"
-                    checked={!admin}
+                    checked={!isAdmin}
                     onChange={handleChange}
                 />
                 <span className="mx-3  text-md font-normal text-gray-700">User</span>
@@ -59,7 +83,7 @@ function Register(){
                     value="Admin"
                     style={{ accentColor: '#3B82F6' }}
                     className=" h-5 w-10 text-blue-500 focus:ring-blue-500 rounded-full"
-                    checked={admin}
+                    checked={isAdmin}
                     onChange={handleChange}
 
                 />
@@ -67,7 +91,9 @@ function Register(){
                 </label>
                 </div>
                 <div className="my-6">
-                <Button text={"Create account"} kind={"secondary"}/>
+                <Button text={"Create account"} kind={"secondary"}
+                onClick={handleSubmit}
+                />
                 </div>
 
             </div>

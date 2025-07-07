@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Button from "../../../components/Button";
 
 function LogIn(){
+    
     return(
         <>
         <div className="grid grid-cols-6 gap-5 h-screen w-screen box-border ">

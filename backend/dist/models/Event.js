@@ -76,7 +76,8 @@ const EventSchema = new mongoose_1.default.Schema({
         default: -1,
     },
     bank_account: {
-        type: { type: mongoose_1.Schema.Types.ObjectId, ref: 'AdminAccount' },
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'AdminAccount',
         required: true
     }
 });

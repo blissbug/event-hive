@@ -38,6 +38,7 @@ function signInController(req, res) {
                 });
                 return;
             }
+            //@ts-ignore
             let valid = bcrypt_1.default.compare(password, user.password);
             if (!valid) {
                 res.json({
@@ -76,6 +77,7 @@ const SignUpValidation = v4_1.default.object({
 function signUpController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let parsedData = SignUpValidation.parse(req.body);
+        console.log(req.body);
         let { name, email, password, isAdmin } = parsedData;
         try {
             let user = yield User_1.default.findOne({ email });

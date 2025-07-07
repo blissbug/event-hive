@@ -42,7 +42,8 @@ const EventSchema = new mongoose.Schema({
         default:-1,
     },
     bank_account:{
-        type:{type:Schema.Types.ObjectId, ref:'AdminAccount'},
+        type:Schema.Types.ObjectId, 
+        ref:'AdminAccount',
         required:true
     }
 

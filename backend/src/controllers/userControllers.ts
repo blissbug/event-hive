@@ -27,6 +27,7 @@ export async function signInController(req:Request,res:Response){
                 return;
             }
 
+            //@ts-ignore
             let valid = bcrypt.compare(password,user.password);
 
             if(!valid){
