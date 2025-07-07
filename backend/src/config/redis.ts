@@ -32,5 +32,10 @@ const sessionObj = session({
     resave: false, 
     saveUninitialized: false, 
     secret: "keyboardcat",
+    cookie:{
+      maxAge:1000 * 60 * 60 * 24 * 15,
+      httpOnly:true,
+      //secure:true for production
+    }
   })
  export default sessionObj;

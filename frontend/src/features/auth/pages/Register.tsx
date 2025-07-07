@@ -22,14 +22,15 @@ function Register(){
         const email = emailRef.current ? emailRef.current.value : '';    
         const password = passwordRef.current ? passwordRef.current.value : '';
 
-        await axios.post(`${BACKEND_URL}/api/user/signup`,{
+        //TODO: Add error handling and proper responses on creation 
+        let msg = await axios.post(`${BACKEND_URL}/api/user/signup`,{
             name,
             email,
             password,
             isAdmin,
         })
 
-        console.log("submitted")
+        console.log(msg.data.message);
     }
 
     return(

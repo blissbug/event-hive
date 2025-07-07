@@ -5,4 +5,6 @@ const userControllers_1 = require("../controllers/userControllers");
 const UserRouter = (0, express_1.Router)();
 UserRouter.post("/signin", userControllers_1.signInController);
 UserRouter.post("/signup", userControllers_1.signUpController);
+UserRouter.post("/logout", userControllers_1.logOutController);
+UserRouter.post("/refresh", userControllers_1.refreshTokenController);
 exports.default = UserRouter;

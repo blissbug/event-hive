@@ -4,6 +4,9 @@ import User from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config"
+import crypto from "crypto"
+import "dotenv/config";
+
 
 //add zod input validation 
 
@@ -36,14 +39,31 @@ export async function signInController(req:Request,res:Response){
                 })
                 return;
             }
+            console.log("here 1")
 
             //@ts-ignore
-            const token = jwt.sign({_id:user._id,isAdmin:user.admin},process.env.JWT_TOKEN);
+            const accessToken = jwt.sign({_id:user._id,isAdmin:user.admin},process.env.JWT_TOKEN,{
+                expiresIn:15*60*60,                
+            });
+
+            console.log("here 1")
+
+
+            const refreshToken =   crypto.randomBytes(32).toString('hex');
+            console.log(refreshToken);
+
+            //store to redis refresh token - userid, expiration of 7 days
+
+            req.session.refreshToken = refreshToken;
+            req.session.userId = user._id.toString();
+            req.session.isAdmin = user.admin;
+
+            console.log("here 1")
 
             res.json({
-                message:"sign In",
+                message:"signed In",
                 isAdmin:user.admin,
-                token
+                accessToken
             })
             return;
         }
@@ -103,3 +123,44 @@ export async function signUpController(req:Request,res:Response){
             }
         } 
     }
+
+export async function logOutController(req:Request,res:Response){
+    await req.session.destroy((err)=>{
+        console.log(err);
+    });
+    res.clearCookie('connect.sid');
+
+    res.status(200).json({
+        message:"user logged out!"
+    })
+    return;
+}
+
+export async function refreshTokenController(req:Request,res:Response){
+    const userIdFromSession = req.session.userId;
+    const isAdminFromSession = req.session.isAdmin;
+
+    if(!req.session.refreshToken || !req.session.userId){
+        res.status(401).json({
+            message:"unauthorized"
+        })
+        return;
+    }
+    await req.session.regenerate((err)=>{console.log(err)});
+
+    const newRefreshTokenString = crypto.randomBytes(32).toString('hex');
+
+    req.session.refreshToken = newRefreshTokenString;
+    req.session.userId = userIdFromSession;
+    req.session.isAdmin = isAdminFromSession;
+
+    //@ts-ignore
+    const accessToken = await jwt.sign({_id:userIdFromSession,isAdmin:isAdminFromSession},process.env.JWT_TOKEN,{
+                expiresIn:7*60,
+    });
+
+    res.status(200).json({
+        accessToken
+    })
+    return;
+}

@@ -14,10 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signInController = signInController;
 exports.signUpController = signUpController;
+exports.logOutController = logOutController;
+exports.refreshTokenController = refreshTokenController;
 const v4_1 = __importDefault(require("zod/v4"));
 const User_1 = __importDefault(require("../models/User"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+require("dotenv/config");
+const crypto_1 = __importDefault(require("crypto"));
 require("dotenv/config");
 //add zod input validation 
 const SignInValidation = v4_1.default.object({
@@ -46,12 +50,23 @@ function signInController(req, res) {
                 });
                 return;
             }
+            console.log("here 1");
             //@ts-ignore
-            const token = jsonwebtoken_1.default.sign({ _id: user._id, isAdmin: user.admin }, process.env.JWT_TOKEN);
+            const accessToken = jsonwebtoken_1.default.sign({ _id: user._id, isAdmin: user.admin }, process.env.JWT_TOKEN, {
+                expiresIn: 15 * 60 * 60,
+            });
+            console.log("here 1");
+            const refreshToken = crypto_1.default.randomBytes(32).toString('hex');
+            console.log(refreshToken);
+            //store to redis refresh token - userid, expiration of 7 days
+            req.session.refreshToken = refreshToken;
+            req.session.userId = user._id.toString();
+            req.session.isAdmin = user.admin;
+            console.log("here 1");
             res.json({
-                message: "sign In",
+                message: "signed In",
                 isAdmin: user.admin,
-                token
+                accessToken
             });
             return;
         }
@@ -77,7 +92,6 @@ const SignUpValidation = v4_1.default.object({
 function signUpController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let parsedData = SignUpValidation.parse(req.body);
-        console.log(req.body);
         let { name, email, password, isAdmin } = parsedData;
         try {
             let user = yield User_1.default.findOne({ email });
@@ -106,5 +120,43 @@ function signUpController(req, res) {
                 console.log("something occured!");
             }
         }
+    });
+}
+function logOutController(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield req.session.destroy((err) => {
+            console.log(err);
+        });
+        res.clearCookie('connect.sid');
+        res.status(200).json({
+            message: "user logged out!"
+        });
+        return;
+    });
+}
+function refreshTokenController(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const userIdFromSession = req.session.userId;
+        const isAdminFromSession = req.session.isAdmin;
+        console.log(req.session);
+        if (!req.session.refreshToken || !req.session.userId) {
+            res.status(401).json({
+                message: "unauthorized"
+            });
+            return;
+        }
+        yield req.session.regenerate((err) => { console.log(err); });
+        const newRefreshTokenString = crypto_1.default.randomBytes(32).toString('hex');
+        req.session.refreshToken = newRefreshTokenString;
+        req.session.userId = userIdFromSession;
+        req.session.isAdmin = isAdminFromSession;
+        //@ts-ignore
+        const accessToken = yield jsonwebtoken_1.default.sign({ _id: userIdFromSession, isAdmin: isAdminFromSession }, process.env.JWT_TOKEN, {
+            expiresIn: 7 * 60,
+        });
+        res.status(200).json({
+            accessToken
+        });
+        return;
     });
 }

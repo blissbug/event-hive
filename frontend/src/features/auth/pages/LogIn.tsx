@@ -1,9 +1,32 @@
 import InputElement from "../../../components/InputElement";
 import { Link } from "react-router-dom";
 import Button from "../../../components/Button";
+import { useRef } from "react";
+import axios from "axios";
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function LogIn(){
-    
+    const emailRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+
+    async function handleSubmit(){
+        const email = emailRef.current ? emailRef.current.value : '';    
+        const password = passwordRef.current ? passwordRef.current.value : '';
+
+        //TODO: Add error handling and proper responses on creation 
+        let msg = await axios.post(`${BACKEND_URL}/api/user/signin`,{
+            email,
+            password,
+        })
+
+        const token = msg.data.token;
+        console.log(token);
+        await localStorage.setItem('authToken', token); 
+
+        console.log(msg);
+    }
+
     return(
         <>
         <div className="grid grid-cols-6 gap-5 h-screen w-screen box-border ">
@@ -21,11 +44,11 @@ function LogIn(){
                 <h1 className="text-3xl font-bold font-montserrat my-2">Log In</h1>
                 <p className="mb-10">Dont have an account? <Link to="/signup" className="text-blue-600">Sign Up</Link></p>
                 <p className="mt-2 text-gray-500 font-semibold" >Email </p>
-                <InputElement placeholder="Enter Email" />
+                <InputElement placeholder="Enter Email" gotRef={emailRef} />
                 <p className="mt-2 text-gray-500 font-semibold">Password </p>
-                <InputElement placeholder="Enter Password"/>
+                <InputElement placeholder="Enter Password" gotRef={passwordRef}/>
                 <div className="my-6">
-                <Button text={"Log In"} kind={"secondary"}/>
+                <Button text={"Log In"} kind={"secondary"} onClick={handleSubmit}/>
                 </div>
 
             </div>

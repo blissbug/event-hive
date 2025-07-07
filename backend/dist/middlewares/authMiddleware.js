@@ -27,7 +27,7 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         next();
     }
     else {
-        res.json({
+        res.status(401).json({
             message: "No token found!"
         });
     }
