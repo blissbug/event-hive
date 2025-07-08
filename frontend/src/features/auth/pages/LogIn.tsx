@@ -1,8 +1,9 @@
 import InputElement from "../../../components/InputElement";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../../components/Button";
 import { useRef } from "react";
 import axios from "axios";
+import { login,setLoading } from "../authSlice";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -15,16 +16,22 @@ function LogIn(){
         const password = passwordRef.current ? passwordRef.current.value : '';
 
         //TODO: Add error handling and proper responses on creation 
-        let msg = await axios.post(`${BACKEND_URL}/api/user/signin`,{
+        try{
+            setLoading(true);
+            let msg = await axios.post(`${BACKEND_URL}/api/user/signin`,{
             email,
             password,
-        })
-
-        const token = msg.data.token;
-        console.log(token);
-        await localStorage.setItem('authToken', token); 
-
-        console.log(msg);
+            })
+            const token = msg.data.accessToken;
+            login(token);
+            //redirect to main page if successful
+        }
+        catch(err){
+            console.log(err);   
+        }
+        finally{
+            setLoading(false);
+        } 
     }
 
     return(

@@ -138,7 +138,6 @@ function refreshTokenController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const userIdFromSession = req.session.userId;
         const isAdminFromSession = req.session.isAdmin;
-        console.log(req.session);
         if (!req.session.refreshToken || !req.session.userId) {
             res.status(401).json({
                 message: "unauthorized"

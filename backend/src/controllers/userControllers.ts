@@ -39,26 +39,19 @@ export async function signInController(req:Request,res:Response){
                 })
                 return;
             }
-            console.log("here 1")
 
             //@ts-ignore
             const accessToken = jwt.sign({_id:user._id,isAdmin:user.admin},process.env.JWT_TOKEN,{
                 expiresIn:15*60*60,                
             });
 
-            console.log("here 1")
-
-
             const refreshToken =   crypto.randomBytes(32).toString('hex');
-            console.log(refreshToken);
 
             //store to redis refresh token - userid, expiration of 7 days
 
             req.session.refreshToken = refreshToken;
             req.session.userId = user._id.toString();
             req.session.isAdmin = user.admin;
-
-            console.log("here 1")
 
             res.json({
                 message:"signed In",
