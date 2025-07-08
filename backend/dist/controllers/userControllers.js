@@ -22,7 +22,6 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 require("dotenv/config");
 const crypto_1 = __importDefault(require("crypto"));
-require("dotenv/config");
 //add zod input validation 
 const SignInValidation = v4_1.default.object({
     email: v4_1.default.email(),
@@ -60,6 +59,7 @@ function signInController(req, res) {
             req.session.userId = user._id.toString();
             req.session.isAdmin = user.admin;
             req.session.save();
+            console.log(req.session.isAdmin);
             res.json({
                 message: "signed In",
                 isAdmin: user.admin,

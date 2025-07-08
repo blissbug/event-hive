@@ -5,6 +5,7 @@ import connectDB from "./config/db";
 import UserRouter from "./routes/User";
 import sessionObj from "./config/redis";
 import publicRouter from "./routes/Public";
+import eventRouter from "./routes/Event";
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.get("/",(req,res)=>{
 //routes
 app.use(publicRouter);
 app.use('/api/user',UserRouter);
+app.use('/api/event',eventRouter);
 
 app.listen(8080,()=>{
     console.log("app is active at 8080")

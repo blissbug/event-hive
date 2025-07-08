@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config"
 import crypto from "crypto"
-import "dotenv/config";
 
 
 //add zod input validation 
@@ -54,6 +53,8 @@ export async function signInController(req:Request,res:Response){
             req.session.isAdmin = user.admin;
 
             req.session.save();
+
+            console.log(req.session.isAdmin);
 
             res.json({
                 message:"signed In",

@@ -10,6 +10,7 @@ const db_1 = __importDefault(require("./config/db"));
 const User_1 = __importDefault(require("./routes/User"));
 const redis_1 = __importDefault(require("./config/redis"));
 const Public_1 = __importDefault(require("./routes/Public"));
+const Event_1 = __importDefault(require("./routes/Event"));
 const app = (0, express_1.default)();
 (0, db_1.default)();
 app.use((0, cors_1.default)({
@@ -31,6 +32,7 @@ app.get("/", (req, res) => {
 //routes
 app.use(Public_1.default);
 app.use('/api/user', User_1.default);
+app.use('/api/event', Event_1.default);
 app.listen(8080, () => {
     console.log("app is active at 8080");
 });

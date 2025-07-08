@@ -5,6 +5,11 @@ const EventSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    admin:{
+        type:Schema.Types.ObjectId, 
+        ref:'User',
+        required:true
+    },
     category:{
         type:String,
         required:true
@@ -39,11 +44,13 @@ const EventSchema = new mongoose.Schema({
     },
     ticketCount:{
         type:Number,
-        default:-1,
+        default:0,
+        required:true
     },
     bank_account:{
-        type:Schema.Types.ObjectId, 
-        ref:'AdminAccount',
+        type:String,
+        //type:Schema.Types.ObjectId, 
+        //ref:'AdminAccount',
         required:true
     }
 

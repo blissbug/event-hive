@@ -10,9 +10,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const isAdminMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.user || req.user.isAdmin) {
-        return res.status(403).json({ message: 'Access denied. Administrator privileges required.' });
+    if (!req.session.userId) {
+        res.status(403).json({ message: 'Access denied. Administrator privileges required.' });
+        return;
     }
-    next();
+    if (req.session.isAdmin === true) {
+        next();
+    }
+    else {
+        res.status(403).json({
+            message: "User is not admin!"
+        });
+        return;
+    }
 });
 exports.default = isAdminMiddleware;
