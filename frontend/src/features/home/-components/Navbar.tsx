@@ -1,6 +1,32 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import EventHiveLogo from "../../../components/EventHiveLogo"
+import { useDispatch, useSelector } from "react-redux"
+import type { RootState } from "../../../app/store";
+import axios from "axios";
+import { logout, setLoading } from "../../auth/authSlice";
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 export default function Navbar(){
+    const isAuthenticated = useSelector((state:RootState) => state.authReducer.isAuthenticated);
+    const nav = useNavigate();
+    const dispatch = useDispatch();
+
+
+    async function handleClick(){
+        if(isAuthenticated){
+            dispatch(setLoading(true));
+            await axios.post(`${BACKEND_URL}/api/user/logout`,{},{
+              withCredentials:true
+            }
+            );
+            dispatch(logout());
+            dispatch(setLoading(false));
+        }
+        else{
+            nav("/register");
+        }
+    }
     return(
         <div className="bg-white w-full h-16 flex justify-between items-center border-b-2 border-gray-200">
             <div className="flex p-4">
@@ -18,7 +44,8 @@ export default function Navbar(){
             </div>
             <div className="p-6 flex items-center">
                 {/*TODO: Make a resuable component of button according to the size*/ }
-                <button className="bg-blue-500 px-5 py-2 rounded-lg text-white">Login</button>
+                <button className="bg-blue-500 px-5 py-2 rounded-lg text-white"
+                onClick={handleClick}>{isAuthenticated?"Log out": "Register"}</button>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" 
                 className="size-9 ml-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />

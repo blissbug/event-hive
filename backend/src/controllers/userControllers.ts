@@ -53,6 +53,8 @@ export async function signInController(req:Request,res:Response){
             req.session.userId = user._id.toString();
             req.session.isAdmin = user.admin;
 
+            req.session.save();
+
             res.json({
                 message:"signed In",
                 isAdmin:user.admin,

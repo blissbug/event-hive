@@ -4,12 +4,15 @@ import Button from "../../../components/Button";
 import { useRef } from "react";
 import axios from "axios";
 import { login,setLoading } from "../authSlice";
+import { useDispatch } from "react-redux";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function LogIn(){
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+    const nav = useNavigate();
+    const dispatch = useDispatch();
 
     async function handleSubmit(){
         const email = emailRef.current ? emailRef.current.value : '';    
@@ -17,20 +20,22 @@ function LogIn(){
 
         //TODO: Add error handling and proper responses on creation 
         try{
-            setLoading(true);
+            dispatch(setLoading(true));
             let msg = await axios.post(`${BACKEND_URL}/api/user/signin`,{
             email,
             password,
+            },{
+                withCredentials: true 
             })
             const token = msg.data.accessToken;
-            login(token);
-            //redirect to main page if successful
+            dispatch(login(token));
+            nav("/");
         }
         catch(err){
             console.log(err);   
         }
         finally{
-            setLoading(false);
+            dispatch(setLoading(false));
         } 
     }
 

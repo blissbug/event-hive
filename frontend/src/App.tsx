@@ -4,19 +4,24 @@ import Navbar from './features/home/-components/Navbar'
 import Footer from './features/home/-components/Footer'
 import { useEffect } from 'react'
 import axios from 'axios'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { logout,refresh, setLoading } from './features/auth/authSlice'
+import type { RootState } from './app/store'
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
 function App() {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector((state:RootState) => state.authReducer.isAuthenticated);
 
     useEffect(()=>{
         async function isLoggedIn(){
           try{
             dispatch(setLoading(true));
-            const resp = await axios.post(`${BACKEND_URL}/api/user/refresh`);
+            console.log(isAuthenticated);
+            const resp = await axios.post(`${BACKEND_URL}/api/user/refresh`,{},{
+              withCredentials:true
+            });
             let accessToken = resp.data.accessToken; 
             dispatch(refresh(accessToken));
           }
@@ -29,7 +34,6 @@ function App() {
             }
           }
           finally{
-            console.log("");
             dispatch(setLoading(false));
           }
         }
