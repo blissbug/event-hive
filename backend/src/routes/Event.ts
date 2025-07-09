@@ -3,16 +3,16 @@ import authMiddleware from "../middlewares/authMiddleware";
 import isAdminMiddleware from "../middlewares/isAdminMiddleware";
 import { createEventController, deleteEventController, getAllEventsByAdmin, getAllEventsController, getEventController } from "../controllers/eventControllers";
 
-const eventRouter = Router();
+const EventRouter = Router();
 
-eventRouter.get("/all",getAllEventsController);
+EventRouter.get("/all",getAllEventsController);
 
-eventRouter.get("/events/",authMiddleware,isAdminMiddleware,getAllEventsByAdmin);
+EventRouter.get("/events/",authMiddleware,isAdminMiddleware,getAllEventsByAdmin);
 
-eventRouter.post("/create",authMiddleware,isAdminMiddleware,createEventController);
+EventRouter.post("/create",authMiddleware,isAdminMiddleware,createEventController);
 
-eventRouter.get("/:eventId",getEventController);
+EventRouter.get("/:eventId",getEventController);
 
-eventRouter.delete("/:eventId",authMiddleware,isAdminMiddleware,deleteEventController);
+EventRouter.delete("/:eventId",authMiddleware,isAdminMiddleware,deleteEventController);
 
-export default eventRouter;
+export default EventRouter;

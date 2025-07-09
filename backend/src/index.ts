@@ -4,8 +4,9 @@ import 'dotenv/config'
 import connectDB from "./config/db";
 import UserRouter from "./routes/User";
 import sessionObj from "./config/redis";
-import publicRouter from "./routes/Public";
-import eventRouter from "./routes/Event";
+import EventRouter from "./routes/Event";
+import AccountRouter from "./routes/Account";
+import PublicRouter from "./routes/Public";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cors({
   optionsSuccessStatus: 200 
 }));app.use(express.json());
 
+//connect to redis
 app.use(
   sessionObj
 )
@@ -32,9 +34,10 @@ app.get("/",(req,res)=>{
 })
 
 //routes
-app.use(publicRouter);
+app.use(PublicRouter);
 app.use('/api/user',UserRouter);
-app.use('/api/event',eventRouter);
+app.use('/api/event',EventRouter);
+app.use('/api/account',AccountRouter);
 
 app.listen(8080,()=>{
     console.log("app is active at 8080")

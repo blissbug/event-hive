@@ -53,7 +53,7 @@ function createEventController(req, res) {
         try {
             let { name, category, tags, location, date, time, imgUrl, description, price, ticketCount, bank_account } = req.body;
             tags = tags.split(" ");
-            //depending on the bank account detailsw ekeep on frontend, get bank account properly here
+            //depending on the bank account detailsw ekeep on frontend, get bank account properly here and populate it accordingly
             //and ensure encryption
             let admin = req.session.userId;
             const data = yield Event_1.default.create({

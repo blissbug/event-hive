@@ -36,25 +36,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const AdminAccountSchema = new mongoose_1.default.Schema({
     admin_id: {
-        type: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     account_number: {
-        type: String,
+        type: {
+            encryptedData: { type: String, required: true },
+            iv: { type: String, required: true },
+        },
         required: true
     },
     ifsc_code: {
-        type: String,
+        type: {
+            encryptedData: { type: String, required: true },
+            iv: { type: String, required: true },
+        },
         required: true
     },
     beneficiary_name: {
-        type: String,
+        type: {
+            encryptedData: { type: String, required: true },
+            iv: { type: String, required: true },
+        },
         required: true
     },
     account_type: {
         type: String,
         required: true
-    }
-});
+    },
+}, { timestamps: true });
 const AdminAccount = mongoose_1.default.model('AdminAccount', AdminAccountSchema);
 exports.default = AdminAccount;

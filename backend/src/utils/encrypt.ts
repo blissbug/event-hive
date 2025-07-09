@@ -14,7 +14,8 @@ export function generate32ByteKey(){
   return cipherKey;
 }
 
-function encrypt(data:BinaryLike):string{
+function encrypt(data:BinaryLike)
+{
   if(!process.env.SECRET_KEY || !process.env.ENCRYPTION_METHOD || process.env.SECRET_KEY===undefined){
     throw new Error("Keys not defined properly or not accessible! Please chceck and ensure proper keys are set.")
   }  
@@ -33,12 +34,11 @@ function encrypt(data:BinaryLike):string{
   let authTagString = authTag.toString('base64');
   const fullCiphertext = fullCiphertextBuffer.toString("base64");
 
-  //TODO: try setting as a json object instead
   const finalEncryptedData = fullCiphertext+":"+nonceString+":"+authTagString;
   return finalEncryptedData;
 }
 
-function decrypt(text:string){
+function decrypt(text:String){
   try{
     if(!process.env.SECRET_KEY || !process.env.ENCRYPTION_METHOD || process.env.SECRET_KEY===undefined){
     throw new Error("Keys not defined properly or not accessible! Please chceck and ensure proper keys are set.")

@@ -1,9 +1,9 @@
 import { Router } from "express";
 import getEvents from "../controllers/publicControllers";
 
-const publicRouter = Router();
+const PublicRouter = Router();
 
-publicRouter.get('/',getEvents);
+PublicRouter.get('/',getEvents);
 
-export default publicRouter;
+export default PublicRouter;
 
